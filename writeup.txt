@@ -1,0 +1,20 @@
+David Pham - Redfin SWE 1
+
+To turn this into an actual application capable of serving millions of users, here are some things that I would consider, in this order:
+
+1) Create the backend server. The backend server would have various endpoints (like healthCheck, getAllTrucks, etc.), and one of them would be an endpoint called 
+"/getTrucks{day}" which would return a specific day's Food Trucks. Additionally, we'd want to scale our system horizontally to have multiple backend servers as well, 
+since we're dealing with millions of users on a daily basis and we want some form of redundancy/availability to handle a large amount of requests.
+
+2) Create the frontend to display the Socrata API data. On an event click (i.e. clicking a Navigation Tab for "Today's Trucks"), we would call the corresponding 
+backend server's endpoint for that element's click action. We'd also need to implement pagination to show 10 trucks at once.
+
+3) Use Load Balancing to distribute the traffic equally to multiple application servers. In terms of how we would split the traffic to each of our servers, a 
+Round Robin algorithm would probably work if each server had the same specifications. If necessary, we could have a second Load Balancer connected to the first
+to form a cluster, where each Load Balancer monitors the health of the other, and in the event that the main Load Balancer fails, we don't have a single
+point of failure since the second LB can take over.
+
+4) I would also want to reduce the number of calls that our backend servers would have to make to the Socrata API. With millions of users accessing our website daily, 
+calling the Socrata API many, many times wouldn't be feasible. So, we could make use of a Cache server. This Cache would sit between our Application Server and the 
+Socrata API's servers. Rather than calling out to the API directly, we would check to see if the data we need exists within our cache. If it does, we can grab it 
+directly from there and avoid making another call to the Socrata API's server. If it doesn't, we'll need to make the API call and insert data into our cache.
