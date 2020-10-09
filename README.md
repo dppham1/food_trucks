@@ -6,4 +6,4 @@ Other than using Python's built-in libraries (requests, datetime and sys) there 
 However, Python3 is required to run this program.
     
 # Running the program
-After you have verified that Python3 is installed correctly, run this in the command line: python3 show_open_food_trucks.py
+After you have verified that Python3 is installed correctly, run this in the command line: `python3 show_open_food_trucks.py`
